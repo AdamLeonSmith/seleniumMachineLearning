@@ -6,9 +6,9 @@ container = client.containers.run(
     'dasxran/tensorflow:trainimages',
     'python /image_classifier/scripts/return_pct.py --graph=/image_classifier/outputModel/retrained_graph.pb '
     '--labels=/image_classifier/outputModel/retrained_labels.txt --input_layer=Placeholder '
-    '--output_layer=final_result --image=/image_classifier/testData/image1.png --lookfor=magnifyingglass',
+    '--output_layer=final_result --image=/image_classifier/imageScrapingData/image1.png --lookfor=magnifyingglass',
     detach=False, auto_remove=False, remove=True, tty=True, stdin_open=True, volumes={
-        'C:/Users/user/PycharmProjects/seleniumMachineLearning/tfImageClassifier': {
+        '/home/adam/workspace/Selenium-Machine-Learning/tfImageClassifier': {
             'bind': '/image_classifier',
             'mode': 'rw',
         }

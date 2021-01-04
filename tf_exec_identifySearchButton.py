@@ -8,8 +8,8 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 from shutil import copy
 import docker
-import win32ui
-import win32con
+#import win32ui
+#import win32con
 
 ROOT_DIR: str = path.abspath(curdir)
 
@@ -28,7 +28,7 @@ def scrapeImages(weblink,lookfor):
 
     try:
         # Local webdriver
-        driver = webdriver.Chrome(executable_path=ROOT_DIR + '/driver/chromedriver.exe')
+        driver = webdriver.Chrome('/opt/chromedriver/87/chromedriver')
 
         # Remote webdriver for docker image
         # driver = webdriver.Remote(command_executor='http://localhost:4444/wd/hub',desired_capabilities=desiredCap)
@@ -66,19 +66,17 @@ def scrapeImages(weblink,lookfor):
                 dblPct = getTfPctDocker(path.basename(imageTestPath),lookfor)
 
                 remove(imageTestPath)  # delete file after tf processing
-
+                print("loc: " +  str(element.location) + " // image: " + elementImagePath + " // probability: " + str(dblPct ))
                 result.append(
                     {'element': element, 'elementImage': elementImagePath, 'location': element.location,
-                     'size': element.size, 'probability':dblPct})
+                     'size': element.size, 'probability': dblPct})
 
         print(result)
 
         seq = [x['probability'] for x in result]
         maxPct = (max(seq))
 
-        if win32ui.MessageBox("Element found with max " + str(round(maxPct * 100, 2)) + "% accuracy.",
-                              "Identify Webpage Element", win32con.MB_OK) == win32con.IDOK:
-            sleep(2)
+        print("Element found with max " + str(round(maxPct * 100, 2)) + "% accuracy.")
 
         for item in result:
             if item.get('probability') == maxPct:
